@@ -3,7 +3,7 @@
 
 ## 1r trobada 16/10 :
 Ens dividim per parelles per a veure que podem fer:
-\n
+
 TASQUES:
   - Cambiar càmera, saber com wasd 'd' ens movem a la dreta 'a' ens movem a l'esquerra (Marçal, Joan)
   - Modificar entorns per a crear habitacions de la pressó (Sergi, Geri)
