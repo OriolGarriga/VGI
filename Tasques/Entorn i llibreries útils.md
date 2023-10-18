@@ -3,6 +3,10 @@
 
 Aquest projecte es centra en el disseny i creació de l'entorn de pressó per a la narrativa. La idea principal és crear un únic espai rectangular dividit en cel·les i un passadís ampli on tota la història hi tingui lloc. L'objectiu inicial és començar amb un enfocament senzill i bàsic, ja que tot plegat pot resultar bastant complex. Determinar una bona estructura de classes .h i .cpp, organitzar en directoris dins d'una carpeta.
 
+## Exemple
+A first-person view of a 3D classroom created using OpenGL.
+[classe 3d opengl](https://github.com/yashdeep97/3D-Classroom-OpenGL)
+
 ## Requisits del Projecte
 
 Aquest projecte fa servir algunes llibreries externes per millorar la seva funcionalitat. Les llibreries interessants que es poden utilitzar i que s'han d'incloure dins de l'entorn GLFW es detallen a continuació:
