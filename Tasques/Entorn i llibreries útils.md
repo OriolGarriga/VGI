@@ -1,7 +1,7 @@
 
 ## Introducció
 
-Aquest projecte es centra en el disseny i creació de l'entorn de pressió per a la narrativa. La idea principal és crear un únic espai rectangular dividit en cel·les i un passadís ampli on tota la història tingui lloc. L'objectiu inicial és començar amb un enfocament senzill i bàsic, ja que tot plegat pot resultar bastant complex.
+Aquest projecte es centra en el disseny i creació de l'entorn de pressó per a la narrativa. La idea principal és crear un únic espai rectangular dividit en cel·les i un passadís ampli on tota la història hi tingui lloc. L'objectiu inicial és començar amb un enfocament senzill i bàsic, ja que tot plegat pot resultar bastant complex. Determinar una bona estructura de classes .h i .cpp, organitzar en directoris dins d'una carpeta.
 
 ## Requisits del Projecte
 
