@@ -34,4 +34,5 @@ Video molt interessant: [sobre us cmake i assimp](https://www.youtube.com/watch?
 - **Descàrrega:** Pots descarregar-la des del seu repositori a GitHub. Visita [Assimp a GitHub](https://github.com/assimp/assimp/tree/master/include/assimp) i entra a la carpeta "include/assimp" per obtenir els arxius d'encapçalament.
 
 ### Tutorial bastant be explicat tot plegat
+OpenGL Tutorials - Quick Start (Program Demos & Source Code)
 [Tutorial](https://www.youtube.com/watch?v=I6tHNsBnK9A&list=PLN3aci2Mk14EhBpjAWqyemXmWFoXr_85o)
