@@ -20,6 +20,7 @@
 
 #include "visualitzacio.h"
 #include "escena.h"
+#include "Cam.h"
 
 // Iluminació: Configurar iluminació de l'escena
 void Iluminacio(GLint sh_programID, char ilumin, bool ifix, bool ilu2sides, bool ll_amb, LLUM* lumin, char obj, bool frnt_fcs,
@@ -1127,17 +1128,47 @@ glm::mat4 nostra_Vista(GLuint sh_programID, glm::vec3 position,
 	CColor col_fons, CColor col_object, char objecte, double mida, int step,
 	bool frnt_fcs, bool oculta, bool testv, bool bck_ln,
 	char iluminacio, bool llum_amb, LLUM* lumi, bool ifix, bool il2sides,
-	bool eix, CMask3D reixa, CPunt3D hreixa, float angle_h, float angle_v)
+	bool eix, CMask3D reixa, CPunt3D hreixa, float angle_h, float angle_v, glm::vec3 dir)
 {
-	glm::vec3 direccio_cam = glm::normalize(glm::vec3(cos(angle_h), cos(angle_v), sin(angle_v) * 2)); //Direccio en la que volem que apunti la camara
-	glm::vec3 l = glm::normalize(glm::vec3(cos(angle_h + PI / 2), sin(angle_h + PI / 2), 0)); //Esquerra
-	glm::vec3 up = glm::cross(direccio_cam, l); //Eix que ens queda per sobre del cap
+	glm::vec3 direccio_cam = glm::vec3(
+		cos(Camara::M_C.angle_ver) * sin(Camara::M_C.angle_hor),
+		sin(Camara::M_C.angle_ver),
+		cos(Camara::M_C.angle_ver) * cos(Camara::M_C.angle_hor)
+	);
+	glm::vec3 r = glm::vec3(
+		sin(Camara::M_C.angle_hor - PI / 2),
+		0,
+		cos(Camara::M_C.angle_hor - PI / 2)
+	); //Esquerra
+	glm::vec3 up = glm::cross(r, direccio_cam);//Eix que ens queda per sobre del cap
+
+	Camara::M_C.dir = direccio_cam;
+	Camara::M_C.r = r;
+
+
+	if (glfwGetKey(Camara::M_C.win,GLFW_KEY_W) == GLFW_PRESS) {
+		position += direccio_cam * Camara::M_C.delta_time * Camara::M_C.vel_moviment;
+	}
+	// Move backward
+	if (glfwGetKey(Camara::M_C.win,GLFW_KEY_A) == GLFW_PRESS) {
+		position -= direccio_cam * Camara::M_C.delta_time * Camara::M_C.vel_moviment;
+	}
+	// Strafe right
+	if (glfwGetKey(Camara::M_C.win,GLFW_KEY_S) == GLFW_PRESS) {
+		position += r * Camara::M_C.delta_time * Camara::M_C.vel_moviment;
+	}
+	// Strafe left
+	if (glfwGetKey(Camara::M_C.win,GLFW_KEY_D) == GLFW_PRESS) {
+		position -= r * Camara::M_C.delta_time * Camara::M_C.vel_moviment;
+	}
 
 	//Resetejem el fondo
 	Fons(col_fons);
 
 	//Fem que la iluminacio es mogui amb la càmara perque sino no veurem res
 	if (!ifix) Iluminacio(sh_programID, iluminacio, ifix, il2sides, llum_amb, lumi, objecte, frnt_fcs, bck_ln, step);
+	
+
 
 	/*La funció lookat serveix per a dirli a la camara on volem que miri:
 	3 paràmetres:

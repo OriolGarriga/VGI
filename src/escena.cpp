@@ -122,26 +122,83 @@ void dibuixa_EscenaGL(GLuint sh_programID, bool eix, GLuint axis_Id, CMask3D rei
 // Definició propietats de reflexió (emissió, ambient, difusa, especular) del material.
 	SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
 
+	//objecte = 'b';
+	col_object = { 0.0,0.0,0.0,1.0 };
+
 	switch (objecte)
 	{
-
-// Arc
 	case ARC:
-		// Definició propietats de reflexió (emissió, ambient, difusa, especular) del material pel color de l'objecte.
 		SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
-		arc(sh_programID, MatriuVista, MatriuTG, sw_mat);
-
-		// Dibuix geometria Mar
-		color_Mar.r = 0.5;	color_Mar.g = 0.4; color_Mar.b = 0.9; color_Mar.a = 1.0;
-		// Definició propietats de reflexió (emissió, ambient, difusa, especular) del material pel color de l'objecte.
-		SeleccionaColorMaterial(sh_programID, color_Mar, sw_mat);
-		// Pas ModelView Matrix a shader
+		glm::mat4 NormalMatrix(1.0), ModelMatrix(1.0);
+		//Paret1
+		ModelMatrix = glm::translate(MatriuTG, vec3(0.0f, 2.5f, 5.5f));
+		ModelMatrix = glm::scale(ModelMatrix, vec3(1.0f, 500.0f, 3000.0f));
+		//ModelMatrix = glm::rotate(ModelMatrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
 		NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
-		// Pas NormalMatrix a shader
 		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
-		draw_TriVAO_Object(MAR_FRACTAL_VAO);
+		draw_TriEBO_Object(GLUT_CUBE);
+
+		//Paret2
+		ModelMatrix = glm::translate(MatriuTG, vec3(3500.0f, 0.0f, 0.0f));
+		ModelMatrix = glm::scale(ModelMatrix, vec3(1.0f, 500.0f, 3000.0f));
+		//ModelMatrix = glm::rotate(ModelMatrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+		NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+		draw_TriEBO_Object(GLUT_CUBE);
+
+		//Kelakehay
+
+		//Paret3  (S'ha de girar 90 graus)
+		ModelMatrix = glm::translate(MatriuTG, vec3(950.0f, 0.0f, 5.5f));
+		ModelMatrix = glm::rotate(ModelMatrix, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		ModelMatrix = glm::scale(ModelMatrix, vec3(50.0f, 500.0f, 1500.0f));
+		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+		NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+		glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+		draw_TriEBO_Object(GLUT_CUBE);
 		break;
+
+		//Paret4 (Tame s'ha de girar)
+
+		//Paret5 (1a interior)
+
+		//Paret6 (2a interior)
+
+		//Paret7 (3a interior)
+
+		//Paret8 (4a interior)
+
+		//Paret9 (5a interior)
+
+		//Paret10 (6a interior)
+
+		//Paret11 (7a interior)
+
+		//Paret12 (8a interior)
+
+		//Paret13 (Terra)
+
+		//Paret14 (Sostre)
+
+// Arc
+	//case ARC:
+	//	// Definició propietats de reflexió (emissió, ambient, difusa, especular) del material pel color de l'objecte.
+	//	SeleccionaColorMaterial(sh_programID, col_object, sw_mat);
+	//	arc(sh_programID, MatriuVista, MatriuTG, sw_mat);
+
+	//	// Dibuix geometria Mar
+	//	color_Mar.r = 0.5;	color_Mar.g = 0.4; color_Mar.b = 0.9; color_Mar.a = 1.0;
+	//	// Definició propietats de reflexió (emissió, ambient, difusa, especular) del material pel color de l'objecte.
+	//	SeleccionaColorMaterial(sh_programID, color_Mar, sw_mat);
+	//	// Pas ModelView Matrix a shader
+	//	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "modelMatrix"), 1, GL_FALSE, &ModelMatrix[0][0]);
+	//	NormalMatrix = transpose(inverse(MatriuVista * ModelMatrix));
+	//	// Pas NormalMatrix a shader
+	//	glUniformMatrix4fv(glGetUniformLocation(sh_programID, "normalMatrix"), 1, GL_FALSE, &NormalMatrix[0][0]);
+	//	draw_TriVAO_Object(MAR_FRACTAL_VAO);
+	//	break;
 
 // Dibuix de l'objecte TIE (Nau enemiga Star Wars)
 	case TIE:

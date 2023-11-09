@@ -1,6 +1,6 @@
 ﻿//******** PRACTICA VISUALITZACIÓ GRÀFICA INTERACTIVA (Escola Enginyeria - UAB)
 //******** Entorn bàsic VS2022 MONOFINESTRA amb OpenGL 4.3+, interfície GLFW, ImGui i llibreries GLM
-//******** Ferran Poveda, Marc Vivet, Carme Julià, Débora Gil, Enric Martí (Setembre 2023)
+//******** Ferran Poveda, Marc Vivet, Carme Julià, Débora Gil, Enric Martí (Setembre 2023) 
 // main.cpp : Definició de main
 //    Versió 0.5:	- Interficie ImGui
 //					- Per a dialeg de cerca de fitxers, s'utilitza la llibreria NativeFileDialog
@@ -19,15 +19,22 @@
 #include "main.h"
 #include "Cam.h"
 
-//klk github
+using namespace std;
+
+
+
+
+
 void InitGL()
 {
 	// TODO: agregar aqu� el c�digo de construcci�n
 
-	Camara::M_C.posi = glm::vec3(0.0f, 0.0f, 0.0f);
+	Camara::M_C.posi = glm::vec3(10.0f, 0.0f, 0.0f);
 	Camara::M_C.up = glm::vec3(0.0f, 1.0f, 0.0f);
-	Camara::M_C.front = glm::vec3(0.0f, 0.0f, -1.0f);
+	Camara::M_C.front = glm::vec3(1.0f, 0.0f, 0.0f);
 	Camara::M_C.vel_moviment = 0.5;
+	Camara::M_C.angle_ver = 0.0;
+	Camara::M_C.angle_hor = 0.0;
 
 	//------ Entorn VGI: Inicialitzaci� de les variables globals de CEntornVGIView
 	int i;
@@ -61,12 +68,12 @@ void InitGL()
 	tr_cpv.x = 0;	tr_cpv.y = 0;	tr_cpv.z = 0;		tr_cpvF.x = 0;	tr_cpvF.y = 0;	tr_cpvF.z = 0;
 
 	// Entorn VGI: Variables de control per les opcions de men� Projecci�, Objecte
-	projeccio = CAP;	// projeccio = PERSPECT;
+	projeccio = PERSPECT;	// projeccio = PERSPECT;
 	ProjectionMatrix = glm::mat4(1.0);	// Inicialitzar a identitat
 	objecte = CAP;		// objecte = TETERA;
 
 	// Entorn VGI: Variables de control Skybox Cube
-	SkyBoxCube = false;		skC_programID = 0;
+	SkyBoxCube = true;		skC_programID = 0;
 	skC_VAOID.vaoId = 0;	skC_VAOID.vboId = 0;	skC_VAOID.nVertexs = 0;
 	cubemapTexture = 0;
 
@@ -237,7 +244,7 @@ void InitGL()
 	w_old = 640;		h_old = 480;		// Mides de la finestra Windows (w-amplada,h-al�ada) per restaurar Finestra des de fullscreen
 	OPV.R = cam_Esferica[0];	OPV.alfa = cam_Esferica[1];		OPV.beta = cam_Esferica[2];		// Origen PV en esf�riques
 	//OPV.R = 15.0;		OPV.alfa = 0.0;		OPV.beta = 0.0;										// Origen PV en esf�riques
-	Vis_Polar = POLARZ;
+	Vis_Polar = POLARY;
 
 	// Entorn VGI: Color de fons i de l'objecte
 	fonsR = true;		fonsG = true;		fonsB = true;
@@ -544,7 +551,7 @@ void OnPaint(GLFWwindow* window)
 				c_fons, col_obj, objecte, true, pas,
 				front_faces, oculta, test_vis, back_line,
 				ilumina, llum_ambient, llumGL, ifixe, ilum2sides,
-				eixos, grid, hgrid, Camara::M_C.angle_hor, Camara::M_C.angle_ver);
+				eixos, grid, hgrid, Camara::M_C.angle_hor, Camara::M_C.angle_ver, Camara::M_C.front);
 		}
 
 // Entorn VGI: Dibuix de l'Objecte o l'Escena
@@ -2569,6 +2576,7 @@ void OnKeyDown(GLFWwindow* window, int key, int scancode, int action, int mods)
 		else if (mods == 0 && key == GLFW_KEY_N && action == GLFW_PRESS) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			camera = NOSTRA_CAM;
+			projeccio = PERSPECT;
 			Camara::M_C.posi = glm::vec3(0, 0, 0);
 		}
 		//Si la camara es la nostra i s'ha apretat qualsevol lletra:
@@ -2577,19 +2585,6 @@ void OnKeyDown(GLFWwindow* window, int key, int scancode, int action, int mods)
 			if (key == GLFW_KEY_S) s_p = true; //Si s'ha apretat s, ho fiquem a true
 			if (key == GLFW_KEY_A) a_p = true; //Si s'ha apretat a, ho fiquem a true
 			if (key == GLFW_KEY_D) d_p = true;
-			
-			if (w_p == true) {
-				Camara::M_C.posi += Camara::M_C.vel_moviment * Camara::M_C.front;
-			}
-			if (s_p == true) {
-				Camara::M_C.posi -= Camara::M_C.vel_moviment * Camara::M_C.front;
-			}
-			if (a_p == true) {
-				Camara::M_C.posi -= glm::normalize(glm::cross(Camara::M_C.front, Camara::M_C.up)) * Camara::M_C.vel_moviment;
-			}
-			if (d_p == true) {
-				Camara::M_C.posi += glm::normalize(glm::cross(Camara::M_C.front, Camara::M_C.up)) * Camara::M_C.vel_moviment;
-			}
 		}
 		else if (camera == NOSTRA_CAM && action == GLFW_RELEASE) {
 			if (key == GLFW_KEY_W) w_p = false; //Si no s'ha apretat w, ho fiquem a false
@@ -4305,9 +4300,8 @@ void OnMouseMove(GLFWwindow* window, double xpos, double ypos)
 	CSize gir = { 0,0 }, girn = { 0,0 }, girT = { 0,0 }, zoomincr = { 0,0 };
 
 	if (camera == NOSTRA_CAM) {
-		Camara::M_C.angle_ver += Camara::M_C.vel_ratoli * float(h / 2 - xpos);
-		Camara::M_C.angle_ver = glm::clamp<float>(Camara::M_C.angle_ver, -PI / 2 + 0.01, PI / 2 - 0.01);
 		Camara::M_C.angle_hor += Camara::M_C.vel_ratoli * float(w / 2 - xpos);
+		Camara::M_C.angle_ver += Camara::M_C.vel_ratoli * float(h / 2 - ypos);
 		glfwSetCursorPos(window, w / 2, h / 2);
 	}
 
@@ -4834,6 +4828,8 @@ int main(void)
 		return -1;
 	}
 
+	Camara::M_C.win = window;
+
 	// Make the window's context current
 	glfwMakeContextCurrent(window);
 
@@ -4916,6 +4912,7 @@ int main(void)
 	ImGui_ImplOpenGL3_Init("#version 130");
 	// Entorn VGI.ImGui: End Setup Dear ImGui context
 
+	Camara::M_C.last_time = glfwGetTime();
 	// Loop until the user closes the window
 	while (!glfwWindowShouldClose(window))
 	{
@@ -4927,6 +4924,9 @@ int main(void)
 		delta = now - previous;
 		previous = now;
 
+		Camara::M_C.current_time = glfwGetTime();
+		Camara::M_C.delta_time = float(Camara::M_C.current_time - Camara::M_C.last_time);
+		Camara::M_C.last_time = Camara::M_C.current_time;
 		// Entorn VGI. Timer: for each timer do this
 		time -= delta;
 		if ((time <= 0.0) && (satelit || anima)) OnTimer();
@@ -4934,29 +4934,40 @@ int main(void)
 		// Poll for and process events
 		glfwPollEvents();
 
-		glm::mat4 View = glm::lookAt(Camara::M_C.posi, Camara::M_C.posi + Camara::M_C.front, Camara::M_C.up);
-
+		//glm::mat4 View = glm::lookAt(Camara::M_C.posi, Camara::M_C.posi + Camara::M_C.front, Camara::M_C.up);
+		
 		if (w_p == true) {
-			glm::vec3 forward = glm::normalize(glm::vec3(Camara::M_C.front.x, 0.0f, Camara::M_C.front.z));
-			Camara::M_C.posi += forward * Camara::M_C.vel_moviment;
-			// Mover hacia adelante en el plano horizontal
+			glm::vec3 movement = glm::normalize(Camara::M_C.front); // Mover hacia adelante a lo largo del eje Z.
+			Camara::M_C.posi += Camara::M_C.dir * movement * Camara::M_C.vel_moviment;
 		}
 
 		if (s_p == true) {
-			glm::vec3 backward = -glm::normalize(glm::vec3(Camara::M_C.front.x, 0.0f, Camara::M_C.front.z));
-			Camara::M_C.posi += backward * Camara::M_C.vel_moviment;
-			// Mover hacia atrás en el plano horizontal
+			glm::vec3 movement = -glm::normalize(Camara::M_C.front); // Mover hacia atrás a lo largo del eje Z.
+			Camara::M_C.posi += Camara::M_C.dir * movement * Camara::M_C.vel_moviment;
 		}
 
 		if (a_p == true) {
-			Camara::M_C.posi -= glm::normalize(glm::cross(Camara::M_C.front, Camara::M_C.up)) * Camara::M_C.vel_moviment;
-			// Mover hacia la izquierda en el plano horizontal
+			glm::vec3 right = glm::normalize(glm::cross(Camara::M_C.front, Camara::M_C.up)); // Mover a la izquierda a lo largo del eje X.
+			Camara::M_C.posi -= right * Camara::M_C.vel_moviment;
 		}
 
 		if (d_p == true) {
-			Camara::M_C.posi += glm::normalize(glm::cross(Camara::M_C.front, Camara::M_C.up)) * Camara::M_C.vel_moviment;
-			// Mover hacia la derecha en el plano horizontal
+			glm::vec3 right = glm::normalize(glm::cross(Camara::M_C.front, Camara::M_C.up)); // Mover a la derecha a lo largo del eje X.
+			Camara::M_C.posi += right * Camara::M_C.vel_moviment;
 		}
+
+		if (glfwGetInputMode(Camara::M_C.win, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
+			double xpos, ypos;
+			glfwGetCursorPos(Camara::M_C.win, &xpos, &ypos);
+
+			Camara::M_C.angle_hor += Camara::M_C.vel_ratoli * float(w / 2 - xpos);
+			Camara::M_C.angle_ver += Camara::M_C.vel_ratoli * float(h / 2 - ypos);
+
+			glfwSetCursorPos(Camara::M_C.win, w / 2, h / 2);
+		}
+
+		cout << Camara::M_C.posi.x << " " << Camara::M_C.posi.y << " " << Camara::M_C.posi.z << endl;
+
 
 
 		draw_Menu_ImGui();

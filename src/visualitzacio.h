@@ -15,7 +15,7 @@ glm::mat4 nostra_Vista(GLuint sh_programID, glm::vec3 position,
 	CColor col_fons, CColor col_object, char objecte, double mida, int step,
 	bool frnt_fcs, bool oculta, bool testv, bool bck_ln,
 	char iluminacio, bool llum_amb, LLUM* lumi, bool ifix, bool il2sides,
-	bool eix, CMask3D reixa, CPunt3D hreixa, float angle_h, float angle_v);
+	bool eix, CMask3D reixa, CPunt3D hreixa, float angle_h, float angle_v, glm::vec3 dir);
 
 // Entorn VGI: Il.luminació
 void Iluminacio(char ilumin, bool ifix, bool ilu2sides, bool ll_amb, LLUM* lumin, char obj, bool frnt_fcs, bool bc_lin, int step);
