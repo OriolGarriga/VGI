@@ -19,7 +19,7 @@
 #include "main.h"
 #include "Cam.h"
 
-
+//klk github
 void InitGL()
 {
 	// TODO: agregar aqu� el c�digo de construcci�n
